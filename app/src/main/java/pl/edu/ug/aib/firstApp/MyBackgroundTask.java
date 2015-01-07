@@ -20,12 +20,21 @@ public class MyBackgroundTask {
 
     @Background
     void doInBackground(String name) {
-        FacebookPage fbPage = restClient.getPage(name);
+        try {
+            FacebookPage fbPage = restClient.getPage(name);
+            publishResult(fbPage);
+        } catch (Exception e) {
+            publishError(e);
+        }
     }
 
     @UiThread
-    void publishResult() {
+    void publishResult(FacebookPage fbPage) {
         activity.goToSecondActivity(fbPage);
     }
 
+    @UiThread
+    void publishError(Exception e) {
+        activity.showError(e);
+    }
 }
